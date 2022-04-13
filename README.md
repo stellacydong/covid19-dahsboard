@@ -1,22 +1,16 @@
-# 🦠 Covid 19 Dashboard - A Dashboard Cum Web App 🦠
+# 🦠 Covid 19 Dashboard 🦠
 
 Checkout the dashboard app here -- https://share.streamlit.io/stellacydong/covid19-dahsboard/main/app.py
 <br>
 
+## objectives
 
-Coronaviruses or Covid-19 are a large family of viruses that may cause respiratory illnesses in humans ranging from common colds to more severe conditions such as Severe Acute Respiratory Syndrome (SARS) and Middle Eastern Respiratory Syndrome (MERS).
-
-## Primary objectives
-* Basic options for users to choose
-  * Cumulative or daily changes measures
-  * Global aggregate stat or per-country information
-* Display a basic statistics for selected area (Global or for specific country)
-* Draw a heatmap detailing given a region and measure (e.g., Daily infections increases in the US)
-* Draw a Choropleth with the same selection (Country-level or state-level comparisons)
+* Illustrate cumulative infections and fatalities, daily infections changes, daily fatalities changes in various countries and states in USA. 
+* Present the trend of the number of confirmed cases, the number of recovery case, and the number of deaths in countries and USA states. 
+* Show the top 10 countries or the top US states which have the most confirmed cases, or the most deaths, or the most fatalities rates. 
 
 ## Data sources
-* Data sources
-  * [Johns Hopkins University Github](https://github.com/CSSEGISandData/COVID-19): Global nCov-19 dataset
+* [Johns Hopkins University Github](https://github.com/CSSEGISandData/COVID-19): Global nCov-19 dataset
 
 ### Prerequisites
 
