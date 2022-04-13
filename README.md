@@ -11,6 +11,7 @@ Checkout the dashboard app here -- https://share.streamlit.io/stellacydong/covid
 
 ## Data sources
 * [Johns Hopkins University Github](https://github.com/CSSEGISandData/COVID-19): Global nCov-19 dataset
+* [NaturalEarth](http://naturalearthdata.com/): Geographical shapedata for countries (admin0) and states-level (admin1) data to be used (1:10m data is used for selected countries for states details while 1:50m used for others)
 
 ### Prerequisites
 
