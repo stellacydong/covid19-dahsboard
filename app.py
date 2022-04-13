@@ -65,39 +65,6 @@ update_status.markdown("Job Complete!")
 
 
 
-# # Covid-19 News Feed Searcher
-
-# -----------------------------------
-# '''
-
-# gn = GoogleNews()
-
-# search_term = st.text_input('Search for Covid News:', 'Covid-19')
-# search_range = st.slider('Search Range (days):', 1, 365, 1)
-
-# search = gn.search(search_term, when=f'{search_range}d')
-
-# data = pd.DataFrame.from_dict(search['entries'])
-
-# f'''
-# # {search_term} News Articles
-# Last *{search_range} day/s*
-
-# ------------------------------------------- 
-# '''
-
-# # Display articles found
-# for row in range(1, data.shape[1]):
-
-#     f'''
-#     ## {data['published'].iloc[row]}
-#     ### {data['title'].iloc[row]}
-#     Link: {data['link'].iloc[row]}
-    
-#     ------------------------------------------- 
-#     '''
-
-
 ################################################################
 # Dataset for Exploratory Data Analysis
 confirmed_df = pd.read_csv('csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
@@ -366,8 +333,8 @@ bubble_chart(selected_count)
 
 
 # Dataset for Exploratory Data Analysis
-us_confirmed_df = pd.read_csv('csse_covid_19_time_series/time_series_covid19_confirmed_us.csv')
-us_deaths_df = pd.read_csv('csse_covid_19_time_series/time_series_covid19_deaths_us.csv')
+us_confirmed_df = pd.read_csv('csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
+us_deaths_df = pd.read_csv('csse_covid_19_time_series/time_series_covid19_deaths_US.csv')
 
 
 confirmed_per_state = us_confirmed_df.groupby(['Province_State']).sum().drop(['UID', 'code3', 'FIPS', 'Lat', 'Long_'], axis=1).reset_index().sort_values(by='4/7/22', ascending=False)
