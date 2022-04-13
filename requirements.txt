@@ -7,5 +7,4 @@ plotly==4.11.0
 streamlit
 streamlit-folium==0.1.0
 scipy==1.1.0
-plotly==4.4.1
-
+plotly==4.11.0
