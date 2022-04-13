@@ -1,4 +1,4 @@
-#Covid19 Dashboard 
+# 🦠 Covid 19 Dashboard 
 
 Checkout the dashboard app here -- https://share.streamlit.io/stellacydong/covid19-dahsboard/main/app.py
 <br>
