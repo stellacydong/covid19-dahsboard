@@ -6,7 +6,7 @@ data/time_series_covid19.csv
 time_series_covid19_confirmed_global.csv
 time_series_covid19_deaths_global.csv
 time_series_covid19_recovered_global.csv
-UID_ISO_FIPS_LookUp_Table
+UID_ISO_FIPS_LookUp_Table.csv
 
 modules:
 frontend.py: Front-end works
