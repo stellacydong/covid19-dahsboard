@@ -22,9 +22,9 @@ def display_sidebar(data):
     country = ['Worldwide'] + list(country[:])
     sel_country = st.sidebar.selectbox('Country/Region',country)
 
-    # Candiates of countries (adm0_a3) are automatically set
+    # Candiates of countries (iso3) are automatically set
     if sel_country and sel_country != 'Worldwide':
-        sel_region = data.loc[(data['len_states']>1) &  (data['Country/Region'].str.contains(sel_country)),'adm0_a3'].unique()[0]
+        sel_region = data.loc[(data['len_states']>1) &  (data['Country/Region'].str.contains(sel_country)),'iso3'].unique()[0]
 
     # 2) Choose a statistics
     st.sidebar.markdown('Choose a Statistics (e.g., State-level Changes)')
@@ -60,17 +60,17 @@ def show_stats(data,sel_region,sel_country,chosen_stat,candidates,map=None):
 
     if not sel_region:
         st.subheader('Global status as of ' + date.strftime('%m/%d/%y'))
-        st.markdown(f"Cumulative infections:  `{data[data['Date']==date].groupby(['adm0_a3','Country/Region'])['Tot_Confirmed'].max().sum():,}`")
-        st.markdown(f"Cumulative  fatalities: `{data[data['Date']==date].groupby(['adm0_a3','Country/Region'])['Tot_Deaths'].max().sum():,}`")
-        st.markdown(f"Daily infections changes: `{data[data['Date']==date].groupby(['adm0_a3','Country/Region'])['iTot_Confirmed'].max().sum():,}`")
-        st.markdown(f"Daily fatalities changes: `{data[data['Date']==date].groupby(['adm0_a3','Country/Region'])['iTot_Deaths'].max().sum():,}`")
+        st.markdown(f"Cumulative infections:  `{data[data['Date']==date].groupby(['iso3','Country/Region'])['Tot_Confirmed'].max().sum():,}`")
+        st.markdown(f"Cumulative  fatalities: `{data[data['Date']==date].groupby(['iso3','Country/Region'])['Tot_Deaths'].max().sum():,}`")
+        st.markdown(f"Daily infections changes: `{data[data['Date']==date].groupby(['iso3','Country/Region'])['iTot_Confirmed'].max().sum():,}`")
+        st.markdown(f"Daily fatalities changes: `{data[data['Date']==date].groupby(['iso3','Country/Region'])['iTot_Deaths'].max().sum():,}`")
 
     else:
         st.subheader(sel_country + ' status as of ' + date.strftime('%m/%d/%y'))
-        st.markdown(f"Cumulative infections:  `{data[(data['Date']==date) & (data['adm0_a3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['adm0_a3','Country/Region'])['Tot_Confirmed'].max().sum():,}`")
-        st.markdown(f"Cumulative fatalities: `{data[(data['Date']==date) & (data['adm0_a3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['adm0_a3','Country/Region'])['Tot_Deaths'].max().sum():,}`")
-        st.markdown(f"Daily infections changes: `{data[(data['Date']==date) & (data['adm0_a3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['adm0_a3','Country/Region'])['iTot_Confirmed'].max().sum():,}`")
-        st.markdown(f"Daily fatalities changes: `{data[(data['Date']==date) & (data['adm0_a3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['adm0_a3','Country/Region'])['iTot_Deaths'].max().sum():,}`")
+        st.markdown(f"Cumulative infections:  `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['Tot_Confirmed'].max().sum():,}`")
+        st.markdown(f"Cumulative fatalities: `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['Tot_Deaths'].max().sum():,}`")
+        st.markdown(f"Daily infections changes: `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['iTot_Confirmed'].max().sum():,}`")
+        st.markdown(f"Daily fatalities changes: `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['iTot_Deaths'].max().sum():,}`")
 
     show_chart(data,chosen_stat,candidates,sel_region)
 
@@ -128,21 +128,21 @@ def show_map(data,stat,region=None,date=None):
     # Parse the geometry out in Pandas to get the exact location of the state
     df["coordinates"] = json_geo["features"].apply(lambda row: row["geometry"]["coordinates"])
     df["name"] = json_geo["features"].apply(lambda row: row["properties"]["name"])
-    df["adm0_a3"] = json_geo["features"].apply(lambda row: row["properties"]["adm0_a3"])
-    df["admin"] = json_geo["features"].apply(lambda row: row["properties"]["admin"])
+    df["iso3"] = json_geo["features"].apply(lambda row: row["properties"]["iso3"])
+    df["iso3"] = json_geo["features"].apply(lambda row: row["properties"]["admin"])
 
     stat_text = list(stat.values())[0]
     stat_keys = list(stat.keys())
 
-    data = data.loc[data['Date']==date,['adm0_a3','Province/State','lat','lon',stat_keys[0],stat_keys[1]]]
+    data = data.loc[data['Date']==date,['iso3','Province/State','lat','lon',stat_keys[0],stat_keys[1]]]
 
     if not region or region == 'Worldwide':
-        data = data.groupby(['adm0_a3'])[['lat','lon',stat_keys[0],stat_keys[1]]].mean()
-        df = pd.merge(df,data,how='inner',left_on=['adm0_a3'],right_on=['adm0_a3'])
+        data = data.groupby(['iso3'])[['lat','lon',stat_keys[0],stat_keys[1]]].mean()
+        df = pd.merge(df,data,how='inner',left_on=['iso3'],right_on=['iso3'])
         zoom = 1
     else:
-        data = data.loc[data['adm0_a3']==region,['adm0_a3','Province/State','lat','lon',stat_keys[0],stat_keys[1]]]
-        df = pd.merge(df,data,how='inner',left_on=['name','adm0_a3'],right_on=['Province/State','adm0_a3'])
+        data = data.loc[data['iso3']==region,['iso3','Province/State','lat','lon',stat_keys[0],stat_keys[1]]]
+        df = pd.merge(df,data,how='inner',left_on=['name','iso3'],right_on=['Province/State','iso3'])
         zoom = 3
 
     df['fill_color'] = (df[stat_keys[0]]/df[stat_keys[0]].max()).replace(np.nan,0).apply(color_scale)
@@ -197,7 +197,7 @@ def show_chart(data,stat,candidates,region,date=None):
         stat_text = ['Infections','Fatalities']
         stat_keys = list(stat.keys())
 
-        data = data.loc[(data['Date']>=date),['Date','adm0_a3','Country/Region','Province/State',stat_keys[0],stat_keys[1]]]
+        data = data.loc[(data['Date']>=date),['Date','iso3','Country/Region','Province/State',stat_keys[0],stat_keys[1]]]
 
         for idx, stat_key in enumerate(stat_keys):
             if region:
@@ -209,7 +209,7 @@ def show_chart(data,stat,candidates,region,date=None):
 
                 target_cat = 'Province/State'
             else:
-                filtered_data = pd.merge(data[['Date','adm0_a3','Country/Region',stat_key]],candidates[['index',stat_key]],how='inner',left_on='adm0_a3',right_on=stat_key)
+                filtered_data = pd.merge(data[['Date','iso3','Country/Region',stat_key]],candidates[['index',stat_key]],how='inner',left_on='iso3',right_on=stat_key)
                 filtered_data.drop([stat_key+'_y'],axis=1,inplace=True)
                 filtered_data.rename(columns={stat_key+'_x':stat_key,'index':'order'},inplace=True)
 
