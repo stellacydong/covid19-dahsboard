@@ -1,5 +1,4 @@
 '''
-
 Dependencies
 data: 
 data/time_series_covid19.csv
@@ -37,10 +36,9 @@ filename = 'csse_covid_19_time_series/time_series_covid19.csv'
 st.title('Covid-19 Dashboard')
 
 # Initial data load
-update_status = st.markdown("Loading infections data...")
+update_status = st.markdown("Loading data...")
 covid = generic.read_dataset(filename)
 update_status.markdown('Load complete!')
-
 
 
 ################################################################
@@ -95,10 +93,6 @@ confirmed_total = int(country_df['Confirmed'].sum())
 deaths_total = int(country_df['Deaths'].sum())
 # recovered_total = int(country_df['Recovered'].sum())
 
-# # Data Preprocessing
-# country_df['Incident_Rate'].fillna(0, inplace=True)
-# country_df['Mortality_Rate'].fillna(0, inplace=True)
-# country_df['Active'] = country_df['Active'].apply(lambda x : 0 if x < 0 else x)
 
 # helper function
 def breakline():

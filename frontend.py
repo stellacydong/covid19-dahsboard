@@ -60,17 +60,13 @@ def show_stats(data,sel_region,sel_country,chosen_stat,candidates,map=None):
 
     if not sel_region:
         st.subheader('Global status as of ' + date.strftime('%m/%d/%y'))
-        st.markdown(f"Cumulative infections:  `{data[data['Date']==date].groupby(['iso3','Country/Region'])['Tot_Confirmed'].max().sum():,}`")
+        st.markdown(f"Cumulative confirmed cases:  `{data[data['Date']==date].groupby(['iso3','Country/Region'])['Tot_Confirmed'].max().sum():,}`")
         st.markdown(f"Cumulative  fatalities: `{data[data['Date']==date].groupby(['iso3','Country/Region'])['Tot_Deaths'].max().sum():,}`")
-        st.markdown(f"Daily infections changes: `{data[data['Date']==date].groupby(['iso3','Country/Region'])['iTot_Confirmed'].max().sum():,}`")
-        st.markdown(f"Daily fatalities changes: `{data[data['Date']==date].groupby(['iso3','Country/Region'])['iTot_Deaths'].max().sum():,}`")
 
     else:
         st.subheader(sel_country + ' status as of ' + date.strftime('%m/%d/%y'))
-        st.markdown(f"Cumulative infections:  `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['Tot_Confirmed'].max().sum():,}`")
+        st.markdown(f"Cumulative confirmed cases:  `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['Tot_Confirmed'].max().sum():,}`")
         st.markdown(f"Cumulative fatalities: `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['Tot_Deaths'].max().sum():,}`")
-        st.markdown(f"Daily infections changes: `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['iTot_Confirmed'].max().sum():,}`")
-        st.markdown(f"Daily fatalities changes: `{data[(data['Date']==date) & (data['iso3']==sel_region) & (data['Country/Region']==sel_country)].groupby(['iso3','Country/Region'])['iTot_Deaths'].max().sum():,}`")
 
     show_chart(data,chosen_stat,candidates,sel_region)
 
