@@ -1,5 +1,4 @@
 '''
-app.py: Frontend runner file for https://covid-streamlit-2021.herokuapp.com/
 
 Dependencies
 data: 
@@ -7,7 +6,7 @@ data/time_series_covid19.csv
 time_series_covid19_confirmed_global.csv
 time_series_covid19_deaths_global.csv
 time_series_covid19_recovered_global.csv
-cases_country.csv
+UID_ISO_FIPS_LookUp_Table
 
 modules:
 frontend.py: Front-end works
