@@ -88,54 +88,11 @@ if st.checkbox('Dark Mode'):
     """, unsafe_allow_html=True)
 
 
-confirmed_total = int(country_df['Confirmed'].sum())
-# active_total = int(country_df['Active'].sum())
-deaths_total = int(country_df['Deaths'].sum())
-# recovered_total = int(country_df['Recovered'].sum())
-
 
 # helper function
 def breakline():
     return st.markdown("<br>", unsafe_allow_html=True)
 
-#################### STATS : Confirmed, Active, Deaths, Recovered ####################
-breakline()
-st.markdown("""
-<style>
-.highlight {
-  border-radius: 0.5rem;
-  color: black;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-.bold {
-  padding-left: 0.3rem;
-  padding-right: 0.3rem;
-  font-weight: 500;
-}
-.red {
-  background-color: lightcoral;
-}
-.blue {
-  background-color: lightblue;
-}
-.green {
-  background-color: lightgreen;
-}
-.yellow {
-  background-color: yellow;
-}
-.center{
-  text-align : center; 
-}
-</style>            
-""", unsafe_allow_html=True)
-
-# t = "<div class='center'> | Confirmed : <span class='highlight blue bold'>" + str(confirmed_total) + "</span> | Active : <span class='highlight yellow bold'>"+ str(active_total) +"</span> | Deaths : <span class='highlight red bold'>"+ str(deaths_total) +"</span> | Recovered : <span class='highlight green bold'>"+ str(recovered_total) +"</span> |</div><br><br>"
-t = "<div class='center'> | Confirmed : <span class='highlight blue bold'>" + str(confirmed_total) + "</span> | Deaths : <span class='highlight red bold'>"+ str(deaths_total) +"</span> </span> |</div><br><br>"
-
-st.markdown(t, unsafe_allow_html=True)
 
 
 ############# Plot for Confirmed, Recovered and Death cases across world ############
