@@ -5,11 +5,11 @@ data/time_series_covid19.csv
 time_series_covid19_confirmed_global.csv
 time_series_covid19_deaths_global.csv
 time_series_covid19_recovered_global.csv
-UID_ISO_FIPS_LookUp_Table.csv
+
 
 modules:
 frontend.py: Front-end works
-generic.py: Load necessary files (infections, map)
+generic.py: Load necessary files
 '''
 
 import streamlit as st
@@ -25,25 +25,25 @@ from plotly.subplots import make_subplots
 import folium
 import numpy as np
 from datetime import date
+from streamlit_folium import folium_static
 
 
 filename = 'csse_covid_19_time_series/time_series_covid19.csv'
 
 ################################################################
 # Header and preprocessing
-
 # Set Title
 st.title('Covid-19 Dashboard')
-
 # Initial data load
-update_status = st.markdown("Loading data...")
+update_status = st.markdown("Loading infections data...")
 covid = generic.read_dataset(filename)
 update_status.markdown('Load complete!')
 
 
+
 ################################################################
 # Sidebar section
-sel_region, sel_country, chosen_stat, sel_map = frontend.display_sidebar(covid)
+sel_region, sel_country, chosen_stat = frontend.display_sidebar(covid)
 
 
 ################################################################
@@ -53,11 +53,7 @@ cand = generic.set_candidates(covid,sel_region,sel_country,chosen_stat)
 update_status.markdown("Calculation complete!")
 
 update_status.markdown("Drawing charts")
-if sel_map:
-    update_status.markdown("Drawing charts & maps...")
-else:
-    update_status.markdown("Drawing charts...")
-frontend.show_stats(covid,sel_region,sel_country,chosen_stat,cand,sel_map)
+frontend.show_stats(covid,sel_region,sel_country,chosen_stat,cand)
 update_status.markdown("Job Complete!")
 
 
@@ -68,32 +64,53 @@ confirmed_df = pd.read_csv('csse_covid_19_time_series/time_series_covid19_confir
 death_df = pd.read_csv('csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
 recovered_df = pd.read_csv('csse_covid_19_time_series/time_series_covid19_recovered_global.csv')
 
-# https://raw.githubusercontent.com/CSSEGISandData/COVID-19/web-data/data/cases_country.csv
-
 country_df = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/web-data/data/cases_country.csv')
 
 
 # Adding multiple themes, including light and dark mode
-if st.checkbox('Dark Mode'):
-    st.markdown("""
-    <style>
-    :root, img, video, h1,h2, h3, h4, .highlight, iframe, .svg-container{
-        filter: invert(100%) hue-rotate(180deg);
-        color: white;
-    }
-    .element-container h2{
-        color: white;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-
+confirmed_total = int(country_df['Confirmed'].sum())
+# active_total = int(country_df['Active'].sum())
+deaths_total = int(country_df['Deaths'].sum())
+# recovered_total = int(country_df['Recovered'].sum())
 
 # helper function
 def breakline():
     return st.markdown("<br>", unsafe_allow_html=True)
 
 
+
+########################### World Map View ###########################
+breakline()
+st.markdown("<h2 style='text-align: center; color: black; background-color:crimson'>World Map View</h2>",
+            unsafe_allow_html=True)
+world_map = folium.Map(location=[11,0], tiles="cartodbpositron", zoom_start=2, max_zoom = 6, min_zoom = 2)
+
+#confirmed_df = confirmed_df[confirmed_df.isnull()]
+
+confirmed_df=confirmed_df.dropna(subset=['Long'])
+
+confirmed_df=confirmed_df.dropna(subset=['Lat'])
+
+for i in range(0,len(confirmed_df)):
+    folium.Circle(
+        location=[confirmed_df.iloc[i]['Lat'], confirmed_df.iloc[i]['Long']],
+        fill=True,
+        radius=(int((np.log(confirmed_df.iloc[i,-1]+1.00001)))+0.2)*20000,
+        color='red',
+        fill_color='indigo',
+        tooltip = "<div style='margin: 0; background-color: black; color: white;'>"+
+                    "<h4 style='text-align:center;font-weight: bold'>"+confirmed_df.iloc[i]['Country/Region'] + "</h4>"
+                    "<hr style='margin:10px;color: white;'>"+
+                    "<ul style='color: white;;list-style-type:circle;align-item:left;padding-left:20px;padding-right:20px'>"+
+                        "<li>Confirmed: "+str(confirmed_df.iloc[i,-1])+"</li>"+
+                        "<li>Deaths:   "+str(death_df.iloc[i,-1])+"</li>"+
+                        "<li>Death Rate: "+ str(np.round(death_df.iloc[i,-1]/(confirmed_df.iloc[i,-1]+1.00001)*100,2))+ "</li>"+
+                    "</ul></div>",
+        ).add_to(world_map)
+
+folium_static(world_map)
+#################################################################################
+breakline()
 
 ############# Plot for Confirmed, Recovered and Death cases across world ############
 breakline()
@@ -457,7 +474,6 @@ else:
 st.subheader('Resource Credits')
 data_source = 'Johns Hopkins University CSSE'
 st.write('Data source: ' + data_source)
-st.write('Map shapedata: Natural Earth')
 st.write('Map provider: Mapbox, OpenStreetMap')
 
 st.markdown("For issues Contact - stellacydong@gmail.com")
